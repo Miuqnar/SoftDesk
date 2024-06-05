@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "softdesk"
+version = "0.1.0"
+description = ""
+authors = ["Miuqnar <79018444+Miuqnar@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.6"
+djangorestframework = "^3.15.1"
+pillow = "^10.3.0"
+djangorestframework-simplejwt = "^5.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
