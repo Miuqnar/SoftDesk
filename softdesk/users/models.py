@@ -5,7 +5,6 @@ from django.db import models
 
 class User(AbstractUser):
     age = models.IntegerField(
-        default=15,
         validators=[MinValueValidator(15)], 
         verbose_name='Age', 
         help_text='Age must be at least 15')

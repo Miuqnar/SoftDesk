@@ -7,56 +7,80 @@ from softdesk.projects.models import (Comment, Project,
                                       Issue)
 
 
-class ProjectListSerializer(serializers.ModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     author =  UserSignupSerializer(read_only=True)
     class Meta:
         model = Project
         fields = ('id', 'name', 'description', 'type', 'created_time', 'author')
         
+    def validate(self, data):
+        user = self.context['request'].user
+        if not user.is_staff:
+            raise serializers.ValidationError("Vous n'êtes pas autorisé à effectuer cette action.")
+        return data
+        
     def create(self, validated_data):
         validated_data['author'] = self.context['request'].user
         return super().create(validated_data)
 
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
 class ContributorSerializer(serializers.ModelSerializer):
     user =  UserSignupSerializer(read_only=True)
-    project = ProjectListSerializer()
     class Meta:
         model = Contributor
-        fields = ('id', 'created_time', 'user', 'project')
-
-
-# class IssueListSerializer(serializers.ModelSerializer):
-#     # project = ProjectListSerializer()
-#     # assigned_to = ContributorSerializer()
-#     class Meta:
-#         model = Issue
-#         fields = ('id', 'title', 'description', 'priority',
-#                   'tag', 'status', 'created_time',
-#                   'author', 'project', 'assigned_to')
-
+        fields = ('id', 'created_time', 'user')
+        
+    def validate(self, data):
+        user = self.context['request'].user
+        if not user.is_staff:
+            raise serializers.ValidationError("Vous n'êtes pas autorisé à effectuer cette action.")
+        return data
+    
+    def create(self, validated_data):
+        validated_data['author'] = self.context['request'].user
+        return super().create(validated_data)
+    
 
 class IssueDetailSerializer(serializers.ModelSerializer):
-    project = ProjectListSerializer()
-    assigned_to = ContributorSerializer()
+    author = serializers.StringRelatedField()
+    assigned_to = serializers.StringRelatedField()
     comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Issue
         fields = ('id', 'title', 'description', 'priority',
                   'tag', 'status', 'created_time',
-                  'author', 'project', 'assigned_to', 'comments')
+                  'author', 'assigned_to', 'comments')
 
     def get_comments(self, instance):
         queryset = instance.comments.all()
         serializer = CommentSerializer(queryset, many=True)
         return serializer.data
+    
+    def validate(self, data):
+        user = self.context['request'].user
+        if not user.is_staff:
+            raise serializers.ValidationError("Vous n'êtes pas autorisé à effectuer cette action.")
+        return data
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField()
     class Meta:
         model = Comment
-        fields = ('uuid', 'created_time', 'description', 'author', 'issue')
+        fields = ('uuid', 'created_time', 'description', 'author')
+    
+    def validate(self, data):
+        user = self.context['request'].user
+        if not user.is_staff:
+            raise serializers.ValidationError("Vous n'êtes pas autorisé à effectuer cette action.")
+        return data
+    
+    def create(self, validated_data):
+        validated_data['author'] = self.context['request'].user
+        return super().create(validated_data)
 
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
@@ -69,3 +93,4 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
         model = Project
         fields = ('name', 'description', 'type', 'created_time',
                   'author', 'contributors', 'issues', 'comments')
+

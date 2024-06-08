@@ -25,7 +25,7 @@ class ContributorAdmin(admin.ModelAdmin):
 
 class IssueAdmin(admin.ModelAdmin):
     list_display = ['title', 'description',
-                    'project_name', 'assigned_to_name',
+                    'project_name', 'assigned_to',
                     'priority', 'tag', 'status',
                     'author', 'created_time']
 
@@ -33,9 +33,9 @@ class IssueAdmin(admin.ModelAdmin):
     def project_name(self, obj):
         return obj.project.name
 
-    @admin.display(description='Assigned To')
-    def assigned_to_name(self, obj):
-        return obj.assigned_to.user.username
+    # @admin.display(description='Assigned To')
+    # def assigned_to_name(self, obj):
+    #     return obj.assigned_to.user.username
 
 
 class CommentAdmin(admin.ModelAdmin):

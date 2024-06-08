@@ -1,19 +1,19 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from rest_framework import viewsets, permissions
 
 from softdesk.projects.models import Contributor, Issue, Project, Comment
+from softdesk.projects.permissions import IsAdminUser
 from softdesk.projects.serializers import (ContributorSerializer,
                                            CommentSerializer,
-                                        #    IssueListSerializer,
                                            IssueDetailSerializer,
                                            ProjectDetailSerializer,
-                                           ProjectListSerializer, )
+                                           ProjectSerializer, )
 
 
 
-
-class ProjectViewSet(ModelViewSet):
-    serializer_class = ProjectListSerializer
+class ProjectViewSet(viewsets.ModelViewSet):
+    serializer_class = ProjectSerializer
     detail_serializer_class = ProjectDetailSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAdminUser]
 
     def get_queryset(self):
         queryset = Project.objects.all()
@@ -25,32 +25,27 @@ class ProjectViewSet(ModelViewSet):
         return super().get_serializer_class()
 
 
-
-class ContributorViewSet(ModelViewSet):
+class ContributorViewSet(viewsets.ModelViewSet):
     serializer_class = ContributorSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAdminUser]
 
     def get_queryset(self):
         project_id = self.kwargs['project_id']
         return Contributor.objects.filter(project_id=project_id)
 
 
-class IssueViewSet(ModelViewSet):
-    # serializer_class = IssueListSerializer
-    # detail_serializer_class = IssueDetailSerializer
+class IssueViewSet(viewsets.ModelViewSet):
     serializer_class = IssueDetailSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAdminUser]
 
     def get_queryset(self):
         project_id = self.kwargs['project_id']
         return Issue.objects.filter(project_id=project_id)
 
-    # def get_serializer_class(self):
-    #     if self.action == 'retrieve':
-    #         return self.detail_serializer_class
-    #     return super().get_serializer_class()
 
-
-class CommentViewset(ModelViewSet):
+class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAdminUser]
 
     def get_queryset(self):
         issue_id = self.kwargs['issue_id']

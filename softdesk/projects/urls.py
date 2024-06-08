@@ -2,7 +2,8 @@ from rest_framework import routers
 
 from softdesk.projects.views import (ProjectViewSet,
                                      ContributorViewSet,
-                                     IssueViewSet, CommentViewset)
+                                     IssueViewSet, CommentViewSet)
+
 
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet, basename='projects')
@@ -10,9 +11,14 @@ router.register(r'projects', ProjectViewSet, basename='projects')
 issue_router = routers.SimpleRouter()
 issue_router.register(r'issue', IssueViewSet, basename='issue')
 
-router_comment = routers.SimpleRouter()
-router_comment.register(r'comment', CommentViewset, basename='comment')
+comment_router = routers.SimpleRouter()
+comment_router.register(r'comment', CommentViewSet, basename='comment')
 
 contributor_router = routers.SimpleRouter()
 contributor_router.register(r'contributor', ContributorViewSet, basename='contributor')
 
+
+# urlpatterns = (router.urls + 
+#                issue_router.urls + 
+#                router_comment.urls + 
+#                contributor_router.urls)

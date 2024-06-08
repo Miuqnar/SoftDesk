@@ -2,7 +2,6 @@ from rest_framework import routers
 
 from softdesk.users.views import UserSignupViewset
 
-router_user = routers.SimpleRouter()
-router_user.register('user', UserSignupViewset, basename='user')
+user_router = routers.SimpleRouter()
+user_router.register(r'users', UserSignupViewset, basename='users')
 
-# urlpatterns = router_user.urls
