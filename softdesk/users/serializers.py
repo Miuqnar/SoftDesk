@@ -1,5 +1,3 @@
-from datetime import timedelta
-from time import timezone
 from rest_framework import serializers
 
 from softdesk.users.models import User
@@ -23,6 +21,19 @@ class UserSignupSerializer(serializers.ModelSerializer):
         # password de validated_data car create_user s'en charge 
         password = validated_data.pop('password')
         user = User.objects.create_user(**validated_data)
-        user.set_password(password)
+        user.is_active = True
+        if password is not None:
+            user.set_password(password)
         user.save()
         return user 
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password')
+        if password:
+            instance.set_password(password)
+        return super().update(instance, validated_data)
+    
+    # def delete(self, instance):
+    #     instance.delete()
+    #     return instance
+    
