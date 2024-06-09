@@ -1,13 +1,14 @@
 from rest_framework import viewsets, permissions
 
-from softdesk.projects.models import Contributor, Issue, Project, Comment
-from softdesk.projects.permissions import IsProjectContributor, IsAuthorOrReadOnly
+from softdesk.projects.models import (Contributor, Issue,
+                                      Project, Comment)
+from softdesk.projects.permissions import (IsProjectContributor,
+                                           IsAuthorOrReadOnly)
 from softdesk.projects.serializers import (ContributorSerializer,
                                            CommentSerializer,
                                            IssueDetailSerializer,
                                            ProjectDetailSerializer,
                                            ProjectSerializer, )
-
 
 
 class ProjectViewSet(viewsets.ModelViewSet):

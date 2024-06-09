@@ -28,7 +28,7 @@ class Project(models.Model):
 
     created_time = models.DateTimeField(
         auto_now_add=True)
-    
+
     def __str__(self) -> str:
         return self.name
 
@@ -49,7 +49,7 @@ class Contributor(models.Model):
 
     class Meta:
         unique_together = ('user', 'project')
-        
+
     def __str__(self) -> str:
         return f"{self.user.username} - {self.project.name}"
 
@@ -95,7 +95,7 @@ class Issue(models.Model):
 
     created_time = models.DateTimeField(
         auto_now_add=True)
-    
+
     def __str__(self) -> str:
         return self.title
 
@@ -119,10 +119,8 @@ class Comment(models.Model):
     author = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE)
-
     created_time = models.DateTimeField(
         auto_now_add=True)
-    
+
     def __str__(self) -> str:
         return f"Comment by {self.author.username} on {self.issue.title}"
-    
