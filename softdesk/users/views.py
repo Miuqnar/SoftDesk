@@ -1,11 +1,12 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import viewsets, permissions 
 
 from softdesk.users.models import User
 from softdesk.users.serializers import UserSignupSerializer
 
 
-class UserSignupViewset(ModelViewSet):
+class UserSignupViewset(viewsets.ModelViewSet):
     serializer_class = UserSignupSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         queryset = User.objects.all()

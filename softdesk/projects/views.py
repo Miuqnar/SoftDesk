@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 
 from softdesk.projects.models import Contributor, Issue, Project, Comment
-from softdesk.projects.permissions import IsAdminUser
+from softdesk.projects.permissions import IsProjectContributor, IsAuthorOrReadOnly
 from softdesk.projects.serializers import (ContributorSerializer,
                                            CommentSerializer,
                                            IssueDetailSerializer,
@@ -13,7 +13,7 @@ from softdesk.projects.serializers import (ContributorSerializer,
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     detail_serializer_class = ProjectDetailSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated, IsProjectContributor]
 
     def get_queryset(self):
         queryset = Project.objects.all()
@@ -27,7 +27,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class ContributorViewSet(viewsets.ModelViewSet):
     serializer_class = ContributorSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated, IsProjectContributor]
 
     def get_queryset(self):
         project_id = self.kwargs['project_id']
@@ -36,7 +36,7 @@ class ContributorViewSet(viewsets.ModelViewSet):
 
 class IssueViewSet(viewsets.ModelViewSet):
     serializer_class = IssueDetailSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_queryset(self):
         project_id = self.kwargs['project_id']
@@ -45,7 +45,7 @@ class IssueViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_queryset(self):
         issue_id = self.kwargs['issue_id']

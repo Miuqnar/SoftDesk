@@ -23,7 +23,7 @@ PRIORITY_CHOICES = (
     ('HIGH', 'High')
 )
 
-# BUG = 'BUG'
+# BG = 'BUG'
 # FEATURE = 'FEATURE'
 # TASK = 'TASK'
 

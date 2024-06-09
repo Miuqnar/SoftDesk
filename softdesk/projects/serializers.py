@@ -13,11 +13,11 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = ('id', 'name', 'description', 'type', 'created_time', 'author')
         
-    def validate(self, data):
-        user = self.context['request'].user
-        if not user.is_staff:
-            raise serializers.ValidationError("Vous n'êtes pas autorisé à effectuer cette action.")
-        return data
+    # def validate(self, data):
+    #     user = self.context['request'].user
+    #     if not user.is_staff:
+    #         raise serializers.ValidationError("Vous n'êtes pas autorisé à effectuer cette action.")
+    #     return data
         
     def create(self, validated_data):
         validated_data['author'] = self.context['request'].user
@@ -31,12 +31,6 @@ class ContributorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contributor
         fields = ('id', 'created_time', 'user')
-        
-    def validate(self, data):
-        user = self.context['request'].user
-        if not user.is_staff:
-            raise serializers.ValidationError("Vous n'êtes pas autorisé à effectuer cette action.")
-        return data
     
     def create(self, validated_data):
         validated_data['author'] = self.context['request'].user
@@ -59,11 +53,6 @@ class IssueDetailSerializer(serializers.ModelSerializer):
         serializer = CommentSerializer(queryset, many=True)
         return serializer.data
     
-    def validate(self, data):
-        user = self.context['request'].user
-        if not user.is_staff:
-            raise serializers.ValidationError("Vous n'êtes pas autorisé à effectuer cette action.")
-        return data
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -71,12 +60,6 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('uuid', 'created_time', 'description', 'author')
-    
-    def validate(self, data):
-        user = self.context['request'].user
-        if not user.is_staff:
-            raise serializers.ValidationError("Vous n'êtes pas autorisé à effectuer cette action.")
-        return data
     
     def create(self, validated_data):
         validated_data['author'] = self.context['request'].user
