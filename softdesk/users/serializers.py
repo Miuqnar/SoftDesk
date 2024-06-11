@@ -4,6 +4,8 @@ from softdesk.users.models import User
 
 
 class UserSignupSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    
     class Meta:
         model = User
         fields = ('id', 'username', 'age',
@@ -21,7 +23,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
         """
         Pop le champ mot de passe pour éviter de le
-         passer dansles arguments de création d'utilisateur
+        passer dansles arguments de création d'utilisateur
         password de validated_data car create_user s'en charge
         """
 
