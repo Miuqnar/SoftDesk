@@ -9,7 +9,7 @@ from softdesk.projects.models import (Project,
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description',
+    list_display = ['id', 'name', 'description',
                     'type', 'author',
                     'created_time']
 
@@ -24,7 +24,7 @@ class ContributorAdmin(admin.ModelAdmin):
 
 
 class IssueAdmin(admin.ModelAdmin):
-    list_display = ['title', 'description',
+    list_display = ['id', 'title', 'description',
                     'project_name', 'assigned_to',
                     'priority', 'tag', 'status',
                     'author', 'created_time']

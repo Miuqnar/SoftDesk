@@ -42,5 +42,5 @@ class UserSignupSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
     # def delete(self, instance):
-    #     instance.delete()
-    #     return instance
+    #     import pdb;pdb.set_trace()
+    #     return instance.delete()

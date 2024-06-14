@@ -9,7 +9,6 @@ from constants import (PRIORITY_CHOICES,
 
 
 class Project(models.Model):
-    objects = None
     name = models.CharField(
         max_length=250,
         verbose_name='Name')
@@ -34,7 +33,6 @@ class Project(models.Model):
 
 
 class Contributor(models.Model):
-    objects = None
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE)
@@ -55,7 +53,6 @@ class Contributor(models.Model):
 
 
 class Issue(models.Model):
-    objects = None
     title = models.CharField(
         max_length=100,
         verbose_name='Title')
@@ -101,7 +98,6 @@ class Issue(models.Model):
 
 
 class Comment(models.Model):
-    objects = None
     uuid = models.UUIDField(
         default=uuid4,
         editable=False,
