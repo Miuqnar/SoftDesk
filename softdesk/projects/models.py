@@ -101,6 +101,7 @@ class Comment(models.Model):
     uuid = models.UUIDField(
         default=uuid4,
         editable=False,
+        # primary_key=True,
         unique=True)
 
     issue = models.ForeignKey(

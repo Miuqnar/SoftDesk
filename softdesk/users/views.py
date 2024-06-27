@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets
 
 from softdesk.users.models import User
 from softdesk.users.serializers import UserSignupSerializer

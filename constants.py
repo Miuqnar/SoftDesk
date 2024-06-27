@@ -1,6 +1,5 @@
 # constants for project class
 
-
 TYPE_CHOICE = (
     ('BACKEND', 'Back-end'),
     ('FRONTEND', 'Front-end'),
@@ -9,8 +8,6 @@ TYPE_CHOICE = (
 )
 
 # constants for issue class
-
-
 PRIORITY_CHOICES = (
     ('LOW', 'Low'),
     ('MEDIUM', 'Medium'),
