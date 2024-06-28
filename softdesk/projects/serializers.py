@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from softdesk.users.models import User
 from softdesk.users.serializers import UserSignupSerializer
 from softdesk.projects.models import (
     Comment, Project,
@@ -29,12 +30,12 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ContributorSerializer(serializers.ModelSerializer):
-    user = UserSignupSerializer(read_only=True)
-    # project = serializers.StringRelatedField()
+    user_info = UserSignupSerializer(source='user', read_only=True)
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         model = Contributor
-        fields = ('id', 'created_time', 'user')
+        fields = ('id', 'created_time', 'user', 'user_info')
     
     def validate(self, attrs):
         self.validate_project_exists()
@@ -47,20 +48,20 @@ class ContributorSerializer(serializers.ModelSerializer):
             Project.objects.get(id=project_id)
         except Project.DoesNotExist:
             raise serializers.ValidationError(
-                'This project does not exist.'
+                "Le projet n'existe pas."
                 )
 
     def validate_contributor_exists(self):
-        project = self.context['view'].kwargs['project_id']
-        user = self.context['request'].user
-        if Contributor.objects.filter(project_id=project, user=user).exists():
+        project_id = self.context['view'].kwargs['project_id']
+        user = self.initial_data['user']
+        if Contributor.objects.filter(project_id=project_id, user=user).exists():
             raise serializers.ValidationError(
-                'Contributor already exists for this project.'
+                'Le contributeur existe déjà pour ce projet.'
                 )
-    
+
     def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
-        validated_data['project_id'] = self.context['view'].kwargs['project_id']
+        project = self.context['view'].project
+        validated_data['project'] = project
         return super().create(validated_data)
 
 
@@ -79,6 +80,11 @@ class IssueDetailSerializer(serializers.ModelSerializer):
         queryset = instance.comments.all()
         serializer = CommentSerializer(queryset, many=True)
         return serializer.data
+    
+    def create(self, validated_data):
+        validated_data['author'] = self.context['request'].user
+        validated_data['project'] = self.context['project']
+        return super().create(validated_data)
 
 
 class CommentSerializer(serializers.ModelSerializer):

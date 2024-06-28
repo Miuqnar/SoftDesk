@@ -66,10 +66,10 @@ class IssueViewSet(viewsets.ModelViewSet):
         project_id = self.kwargs['project_id']
         return Issue.objects.filter(project_id=project_id)
     
-
-    # def perform_create(self, serializer):
-    #     project = Project.objects.get(id=self.kwargs['project_id'])
-    #     serializer.save(author=self.request.user, project=project)
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['project'] = Project.objects.get(id=self.kwargs['project_id'])
+        return context
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -87,7 +87,4 @@ class CommentViewSet(viewsets.ModelViewSet):
         context['issue'] = Issue.objects.get(id=self.kwargs['issue_id'])
         return context
     
-    # def perfom_create(self, serializer):
-    #     issue = Issue.objects.get(id=self.kwargs['issue_id'])
-    #     # serializer.save(author=self.request.user, issue=issue)
     

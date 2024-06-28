@@ -23,7 +23,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
         """
         Pop le champ mot de passe pour éviter de le
-        passer dansles arguments de création d'utilisateur
+        passer dans les arguments de création d'utilisateur
         password de validated_data car create_user s'en charge
         """
 
