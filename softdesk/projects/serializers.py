@@ -67,14 +67,17 @@ class ContributorSerializer(serializers.ModelSerializer):
 
 class IssueDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
-    assigned_to = serializers.StringRelatedField()
+    assigned_to = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all())
+    assigned_to_name = serializers.StringRelatedField(
+        source='assigned_to', read_only=True)
     comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Issue
         fields = ('id', 'title', 'description', 'priority',
                   'tag', 'status', 'created_time',
-                  'author', 'assigned_to', 'comments')
+                  'author', 'assigned_to', 'assigned_to_name', 'comments')
 
     def get_comments(self, instance):
         queryset = instance.comments.all()
@@ -84,6 +87,10 @@ class IssueDetailSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['author'] = self.context['request'].user
         validated_data['project'] = self.context['project']
+        assigned_to = validated_data.get('assigned_to')
+        if assigned_to is None:
+            raise serializers.ValidationError(
+                {'assigned_to': 'This field cannot be null.'})
         return super().create(validated_data)
 
 

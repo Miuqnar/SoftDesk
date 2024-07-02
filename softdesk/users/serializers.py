@@ -21,12 +21,6 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        """
-        Pop le champ mot de passe pour éviter de le
-        passer dans les arguments de création d'utilisateur
-        password de validated_data car create_user s'en charge
-        """
-
         password = validated_data.pop('password')
         user = User.objects.create_user(**validated_data)
         user.is_active = True
@@ -40,7 +34,3 @@ class UserSignupSerializer(serializers.ModelSerializer):
         if password:
             instance.set_password(password)
         return super().update(instance, validated_data)
-
-    # def delete(self, instance):
-    #     import pdb;pdb.set_trace()
-    #     return instance.delete()
